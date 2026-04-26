@@ -1,53 +1,65 @@
 import { useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
+import { Toaster } from "sonner";
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import { AuthProvider, useAuth } from "@/lib/auth";
+import { ThemeProvider } from "@/lib/theme";
+import LoginPage from "@/pages/LoginPage";
+import Dashboard from "@/pages/Dashboard";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
-
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
-
+function AuthCallback() {
+  const navigate = useNavigate();
+  const loc = useLocation();
+  const { handleCallback } = useAuth();
   useEffect(() => {
-    helloWorldApi();
+    const params = new URLSearchParams(loc.search);
+    const token = params.get("token");
+    if (token) {
+      handleCallback(token).then((u) => {
+        navigate(u ? "/dashboard" : "/login?error=session_failed", { replace: true });
+      });
+    } else {
+      navigate("/login?error=no_token", { replace: true });
+    }
+    // eslint-disable-next-line
   }, []);
-
   return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
+    <div className="h-screen flex items-center justify-center text-muted-foreground">
+      Signing you in…
     </div>
   );
-};
+}
+
+function Protected({ children }) {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="h-screen flex items-center justify-center text-muted-foreground">Loading…</div>;
+  if (!user) return <Navigate to="/login" replace />;
+  return children;
+}
+
+function Public({ children }) {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="h-screen flex items-center justify-center text-muted-foreground">Loading…</div>;
+  if (user) return <Navigate to="/dashboard" replace />;
+  return children;
+}
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <ThemeProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <Toaster position="top-right" richColors closeButton />
+          <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/login" element={<Public><LoginPage /></Public>} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
+            <Route path="/dashboard" element={<Protected><Dashboard /></Protected>} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
