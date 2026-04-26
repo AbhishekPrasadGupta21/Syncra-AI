@@ -1,0 +1,126 @@
+{
+  "project_name": "Syncra AI",
+  "domain": "Productivity SaaS / Email-Integrated Task Manager",
+  "theme_strategy": {
+    "mode": "Dark theme default, with mandatory Light/Dark toggle",
+    "archetype": "Archetype 4 (Swiss & High-Contrast) adapted for Deep Tech SaaS",
+    "vibe": "Elite, dense, highly functional. Like an air traffic control room for your inbox. Zero generic 'AI slop' gradients except for specific AI-action buttons.",
+    "rules": [
+      "No muddy grays. Use pure, tinted grays (Slate or Zinc scale) for extreme crispness.",
+      "The logo gradient (Blue to Purple) is restricted to the primary 'Convert to Task' button, the logo itself, and subtle active-state 1px borders. Do NOT use it for backgrounds or headers.",
+      "Layout is a dense, edge-to-edge 'F-pattern' Bento grid (h-screen). Native app feel, no global scrolling. Individual panes scroll."
+    ]
+  },
+  "typography": {
+    "fonts": {
+      "headings": "Manrope",
+      "body": "Manrope",
+      "mono_data": "JetBrains Mono (MUST use for timestamps, tags, task IDs, stats)"
+    },
+    "scale_and_rules": [
+      "Time-based Greeting (H1): text-2xl or text-3xl, tracking-tight, font-semibold.",
+      "Pane Headers (H3): text-xs uppercase, tracking-[0.2em], text-muted-foreground.",
+      "Body/Emails: text-sm, leading-relaxed. Dense and scannable.",
+      "NEVER use generic Inter or Roboto for headings. If Manrope isn't available, fallback to pure sans-serif system fonts with aggressive tracking adjustments."
+    ]
+  },
+  "color_palette": {
+    "dark_mode": {
+      "background": "#09090b",
+      "surface": "#121214",
+      "border": "#27272a",
+      "text_primary": "#f8fafc",
+      "text_secondary": "#a1a1aa",
+      "ai_accent": "bg-gradient-to-r from-blue-600 to-purple-600",
+      "badge_important": "text-rose-500 border-rose-500/30 bg-rose-500/10",
+      "badge_normal": "text-slate-300 border-slate-700 bg-slate-800",
+      "badge_spam": "text-amber-500 border-amber-500/30 bg-amber-500/10"
+    },
+    "light_mode": {
+      "background": "#ffffff",
+      "surface": "#f8fafc",
+      "border": "#e2e8f0",
+      "text_primary": "#0f172a",
+      "text_secondary": "#64748b",
+      "ai_accent": "bg-gradient-to-r from-blue-600 to-purple-600",
+      "badge_important": "text-rose-700 border-rose-200 bg-rose-50",
+      "badge_normal": "text-slate-700 border-slate-200 bg-slate-100",
+      "badge_spam": "text-amber-700 border-amber-200 bg-amber-50"
+    },
+    "rules": [
+      "Active email/task row: Do not change the whole background. Use a subtle left-border (2px solid blue-500) and a very faint bg-blue-500/5 on hover/active."
+    ]
+  },
+  "layout_and_spacing": {
+    "structure": "Edge-to-edge Native App Layout (100vh). No global page scroll.",
+    "dashboard_grid": {
+      "wrapper": "flex h-screen w-full overflow-hidden",
+      "sidebar": "w-16 or w-64 (collapsible), flex-shrink-0 border-r",
+      "main_content": "flex-1 flex flex-col min-w-0",
+      "header": "h-16 flex items-center px-6 border-b shrink-0 justify-between",
+      "content_panes": "flex-1 grid grid-cols-12 gap-0 overflow-hidden"
+    },
+    "bento_panes": {
+      "email_list": "col-span-3 border-r overflow-y-auto p-0",
+      "email_detail": "col-span-5 border-r flex flex-col overflow-hidden",
+      "tasks_and_calendar": "col-span-4 flex flex-col overflow-hidden (Top 50% Tasks, Bottom 50% Calendar - divided by border-b)"
+    },
+    "density": "High density. Use gap-2 or gap-3. Padding inside lists should be p-3 or p-4.",
+    "borders": "Expose the grid. Use 1px borders strictly to separate logical panes. Avoid rounded corners on major panes (use rounded-none to match screen edges), but use rounded-md for inner cards/buttons."
+  },
+  "component_guidelines": {
+    "login_page": {
+      "layout": "Split screen or centered pristine card. Must prominently feature the Syncra AI logo.",
+      "button": "Google OAuth button with standard icon, prominent text."
+    },
+    "header": {
+      "greeting": "Dynamic based on time ('Good Morning, Alex').",
+      "stats": "Total/Completed/Pending tasks displayed as ultra-minimal metrics (e.g., '12 Pending / 3 Due Today') using JetBrains Mono."
+    },
+    "email_list": {
+      "item": "Compact. Sender name (bold), Subject (truncate), 1-line preview. Right-aligned time.",
+      "badges": "Use micro-badges (Important, Normal, Spam) strictly styled as technical labels (uppercase, mono font)."
+    },
+    "email_detail": {
+      "ai_summary_card": "Top of the view. A highlighted card (subtle blue/purple border) containing the AI-generated 'Quick Summary'.",
+      "convert_button": "The most prominent button in the UI. 'Convert to Task'. Use the ai_accent gradient, hover:scale-[1.02] transition, maybe a subtle glow."
+    },
+    "task_panel": {
+      "style": "List view or highly compact Kanban. Checkboxes for completion. Priority indicators (High=Red, Med=Yellow, Low=Gray).",
+      "metadata": "Deadlines must use mono font."
+    },
+    "calendar_view": {
+      "style": "Custom mini-calendar or timeline agenda view showing meetings and deadlines. High contrast for the current day."
+    }
+  },
+  "interactions_and_motion": {
+    "hover_states": "All lists (emails, tasks) must have a distinct hover state (e.g., bg-muted/50).",
+    "transitions": "Use 'transition-all duration-200 ease-in-out' on interactive elements.",
+    "buttons": "Active states must visually depress (scale-95).",
+    "scrolling": "Custom scrollbars required. Thin, subtle, no gutter."
+  },
+  "assets": {
+    "logo": {
+      "url": "https://customer-assets.emergentagent.com/job_f2ff0717-b1f4-4eab-a47f-f1c021dfd771/artifacts/o42fuh9l_ChatGPT%20Image%20Apr%2026%2C%202026%2C%2001_29_20%20PM.png",
+      "usage": "Use exactly this URL for the main logo on the login page and top-left sidebar/header.",
+      "tagline": "Your Inbox. Our Intelligence. Your Tasks."
+    },
+    "icons": "lucide-react. Keep them sharp and small (14px or 16px). Do not oversize icons."
+  },
+  "testing_attributes": {
+    "rules": "All interactive elements MUST include a data-testid attribute.",
+    "examples": [
+      "data-testid='login-google-button'",
+      "data-testid='theme-toggle'",
+      "data-testid='email-item-0'",
+      "data-testid='convert-task-btn'",
+      "data-testid='task-checkbox-0'"
+    ]
+  },
+  "libraries_and_tools": [
+    "tailwindcss",
+    "shadcn/ui (customized for high density flat look)",
+    "lucide-react",
+    "date-fns (for time-based greeting and calendar formatting)"
+  ]
+}
