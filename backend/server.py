@@ -85,9 +85,10 @@ def _now_iso() -> str:
 # ---------------- Auth ----------------
 @api.get("/auth/google/login")
 async def google_login():
-    url, state = build_authorization_url()
+    url, state, code_verifier = build_authorization_url()
     await db.oauth_states.insert_one({
         "state": state,
+        "code_verifier": code_verifier,
         "created_at": _now_iso(),
     })
     return {"authorization_url": url}
@@ -97,14 +98,16 @@ async def google_login():
 async def google_callback(code: Optional[str] = None, state: Optional[str] = None, error: Optional[str] = None):
     if error or not code:
         return RedirectResponse(f"{FRONTEND_URL}/login?error={error or 'missing_code'}")
+    code_verifier = None
     if state:
         s = await db.oauth_states.find_one({"state": state}, {"_id": 0})
         if not s:
             return RedirectResponse(f"{FRONTEND_URL}/login?error=invalid_state")
+        code_verifier = s.get("code_verifier")
         await db.oauth_states.delete_one({"state": state})
 
     try:
-        creds = exchange_code_for_tokens(code)
+        creds = exchange_code_for_tokens(code, code_verifier)
     except Exception:
         logger.exception("Token exchange failed")
         return RedirectResponse(f"{FRONTEND_URL}/login?error=token_exchange_failed")

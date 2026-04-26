@@ -45,11 +45,13 @@ def build_authorization_url():
     url, state = flow.authorization_url(
         access_type="offline", prompt="consent", include_granted_scopes="true"
     )
-    return url, state
+    return url, state, flow.code_verifier
 
 
-def exchange_code_for_tokens(code: str) -> Credentials:
+def exchange_code_for_tokens(code: str, code_verifier: str | None = None) -> Credentials:
     flow = build_flow()
+    if code_verifier:
+        flow.code_verifier = code_verifier
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         flow.fetch_token(code=code)
