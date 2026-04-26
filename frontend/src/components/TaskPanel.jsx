@@ -16,7 +16,7 @@ const PRIORITY_DOT = {
   low: "bg-slate-400",
 };
 
-export default function TaskPanel({ tasks, setTasks, reload }) {
+export default function TaskPanel({ tasks, setTasks, reload, onNotify, expanded = false }) {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ title: "", description: "", deadline: "", priority: "medium", type: "task" });
 
@@ -26,6 +26,10 @@ export default function TaskPanel({ tasks, setTasks, reload }) {
       const { data } = await api.patch(`/tasks/${t.id}`, { status: next });
       setTasks((prev) => prev.map((x) => (x.id === t.id ? data : x)));
       reload?.();
+      if (next === "completed") {
+        toast.success(`Completed: ${t.title}`);
+        onNotify?.("task_completed", `Task completed: ${t.title}`, { taskId: t.id });
+      }
     } catch { toast.error("Update failed"); }
   };
 
@@ -49,6 +53,7 @@ export default function TaskPanel({ tasks, setTasks, reload }) {
       setOpen(false);
       setForm({ title: "", description: "", deadline: "", priority: "medium", type: "task" });
       toast.success("Task created");
+      onNotify?.("task_created", `Task created: ${data.title}`, { taskId: data.id });
     } catch { toast.error("Could not create task"); }
   };
 

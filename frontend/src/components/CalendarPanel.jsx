@@ -9,7 +9,7 @@ const TYPE_COLOR = {
   task: "bg-purple-500",
 };
 
-export default function CalendarPanel({ tasks }) {
+export default function CalendarPanel({ tasks, expanded = false }) {
   const [cursor, setCursor] = useState(new Date());
 
   const eventsByDay = useMemo(() => {
